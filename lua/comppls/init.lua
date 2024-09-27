@@ -49,6 +49,7 @@ function M.compile()
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", errMsg })
 
 			-- Notify the user
+			vim.api.nvim_command("echo """)
 			vim.api.nvim_echo(
 				{ { "Compilation failed: Invalid command or error during execution", "ErrorMsg" } },
 				false,
