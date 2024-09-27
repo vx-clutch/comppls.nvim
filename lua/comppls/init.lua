@@ -50,7 +50,9 @@ function M.compile()
 end
 
 function M.setup()
-	vim.api.nvim_create_user_command("CompPls", M.compile, {})
+	vim.api.nvim_create_user_command("CompPls", function()
+		M.compile()
+	end, {})
 end
 
 return M
