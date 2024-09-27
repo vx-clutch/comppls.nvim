@@ -33,7 +33,8 @@ function M.compile()
 
 		-- Write the initial compilation message
 		local msg = "Compilation started at " .. os.date("%a %B %d %X")
-		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { msg, "", cmd })
+		local dir = vim.fn.getcwd()
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { dir, msg, "", cmd })
 
 		-- Execute the compilation command
 		local splitCmd = strTtab(cmd)
@@ -45,7 +46,7 @@ function M.compile()
 			local errTbl = strTtbl(result.stderr)
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Error:", "" })
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, errTbl)
-			local errMsg = "Compilation failed with exit code " .. result.code .. " at " .. os.date("%a %B %d %X")
+			local errMsg = "Compilation exited abnormaly with code " .. result.code .. " at " .. os.date("%a %B %d %X")
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", errMsg })
 
 			-- Notify the user
@@ -64,10 +65,11 @@ function M.compile()
 		end
 
 		-- Highlight the result
-		vim.api.nvim_set_hl(0, "Good", { fg = "#FFFF00" })
+		vim.api.nvim_set_hl(0, "Good", { fg = "#00FF00" })
 		vim.api.nvim_set_hl(0, "Fatal", { fg = "#FF0000" })
 		vim.fn.matchadd("Good", "finished", 0, -1, { window = 0 })
 		vim.fn.matchadd("Fatal", "failed", 0, -1, { window = 0 })
+		vim.fn.matchadd("Fatal", "exited abnormaly", 0, -1, { window = 0 })
 
 		-- Set the buffer to readonly and mark it unmodified
 		vim.api.nvim_buf_set_option(buf, "readonly", true)
