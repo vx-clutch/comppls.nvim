@@ -39,24 +39,34 @@ function M.compile()
 		local splitCmd = strTtab(cmd)
 		local result = vim.system(splitCmd, { text = true }):wait()
 
-		-- Process the result and errors
-		local resultTbl = strTtbl(result.stdout)
-		local errTbl = strTtbl(result.stderr)
-		vim.api.nvim_buf_set_lines(buf, -1, -1, false, resultTbl)
-
-		-- Write the finish message
-		local okprt = "Compilation finished at " .. os.date("%a %B %d %X")
+		-- Check if the command failed (exit code is non-zero)
 		if result.code ~= 0 then
+			-- Display an error in the buffer and the command line
+			local errTbl = strTtbl(result.stderr)
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Error:", "" })
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, errTbl)
-			okprt = "Compilation exited abnormally at " .. os.date("%a %B %d %X")
+			local errMsg = "Compilation failed with exit code " .. result.code .. " at " .. os.date("%a %B %d %X")
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", errMsg })
+
+			-- Notify the user
+			vim.api.nvim_echo(
+				{ { "Compilation failed: Invalid command or error during execution", "ErrorMsg" } },
+				false,
+				{}
+			)
+		else
+			-- Process the result if successful
+			local resultTbl = strTtbl(result.stdout)
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, resultTbl)
+			local okprt = "Compilation finished at " .. os.date("%a %B %d %X")
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", okprt })
 		end
-		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", okprt })
 
 		-- Highlight the result
 		vim.api.nvim_set_hl(0, "Good", { fg = "#FFFF00" })
 		vim.api.nvim_set_hl(0, "Fatal", { fg = "#FF0000" })
 		vim.fn.matchadd("Good", "finished", 0, -1, { window = 0 })
-		vim.fn.matchadd("Fatal", "exited abnormally", 0, -1, { window = 0 })
+		vim.fn.matchadd("Fatal", "failed", 0, -1, { window = 0 })
 
 		-- Set the buffer to readonly and mark it unmodified
 		vim.api.nvim_buf_set_option(buf, "readonly", true)
