@@ -1,5 +1,6 @@
 local M = {}
-M.setup = function()
+
+function M.compile()
 	local last = ""
 	local function strTtab(input)
 		local result = {}
@@ -47,4 +48,9 @@ M.setup = function()
 		end
 	end, {})
 end
+
+function M.setup()
+	vim.api.nvim_create_user_command("CompPls", M.compile(), {})
+end
+
 return M
