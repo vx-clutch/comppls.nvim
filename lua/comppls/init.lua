@@ -18,6 +18,7 @@ function M.compile()
 		for line in string.gmatch(input, "[^\n]+") do
 			table.insert(result, line)
 		end
+		table.remove(result, 1)
 		return result
 	end
 
