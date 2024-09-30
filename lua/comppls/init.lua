@@ -111,9 +111,8 @@ function M.shell()
 		vim.api.nvim_buf_set_option(buf, "readonly", false)
 
 		-- Write the initial compilation message
-		local msg = cmd .. " started at " .. os.date("%a %B %d %X")
 		local dir = vim.fn.getcwd()
-		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { dir, msg, "", cmd })
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { dir, "", cmd })
 
 		-- Execute the compilation command
 		local splitCmd = strTtab(cmd)
@@ -139,8 +138,6 @@ function M.shell()
 			-- Process the result if successful
 			local resultTbl = strTtbl(result.stdout)
 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, resultTbl)
-			local okprt = cmd .. " finished at " .. os.date("%a %B %d %X")
-			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", okprt })
 		end
 
 		-- Highlight the result
