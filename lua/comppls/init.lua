@@ -62,18 +62,17 @@ end
 function M.shell()
 	local buf = scratch()
 	local cmd = strTtab(vim.fn.input("Shell Command: "))
-	local i
 	if cmd ~= "" then
 		vim.fn.jobstart(cmd, {
 			stdout_buffered = true,
 			on_stdout = function(_, data)
-				if data and i ~= 0 then
-					vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
-					i = i + 1
+				if data and #data > 0 then
+					for _, line in ipairs(data) do
+						vim.api.nvim_buf_set_lines(buf, -1, -1, false, { line })
+					end
 				end
 			end,
 		})
-		print("after job")
 	else
 		print("Fail :(")
 	end
