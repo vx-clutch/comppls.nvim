@@ -66,15 +66,16 @@ function M.shell()
 		vim.fn.jobstart(cmd, {
 			stdout_buffered = true,
 			on_stdout = function(_, data)
-				if data and #data > 0 then
-					for _, line in ipairs(data) do
-						vim.api.nvim_buf_set_lines(buf, -1, -1, false, { line })
-					end
+				if data then
+					vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+				end
+			end,
+			on_stderr = function(_, data)
+				if data then
+					vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
 				end
 			end,
 		})
-	else
-		print("Fail :(")
 	end
 end
 
