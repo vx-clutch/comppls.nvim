@@ -81,9 +81,10 @@ end
 
 function M.silent_shell()
 	local cmd = vim.fn.input("Silent Shell Command: ")
-	if cmd ~= "" then
-		vim.cmd("silent!" .. cmd)
+	if cmd ~= "" or cmd == nil then
+		return
 	end
+	vim.cmd("silent! !" .. cmd)
 end
 
 function M.setup()
