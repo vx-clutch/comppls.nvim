@@ -90,6 +90,7 @@ function M.setup()
 	-- Define CompPls command, calling compile logic
 	vim.api.nvim_create_user_command("CompPls", M.compile, {})
 	vim.api.nvim_create_user_command("ShellPls", M.shell, {})
+	vim.api.nvim_create_user_command("SilentPls", M.silent_shell(), {})
 end
 
 return M
