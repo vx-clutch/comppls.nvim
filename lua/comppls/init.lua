@@ -80,7 +80,7 @@ function M.shell()
 end
 
 function M.silent_shell()
-	local cmd = strTtab(vim.fn.input("Silent Shell Command: "))
+	local cmd = vim.fn.input("Silent Shell Command: ")
 	if cmd ~= "" then
 		vim.cmd("!" .. cmd)
 	end
