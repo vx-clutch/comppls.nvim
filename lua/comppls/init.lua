@@ -79,6 +79,13 @@ function M.shell()
 	end
 end
 
+function M.silent_shell()
+	local cmd = strTtab(vim.fn.input("Silent Shell Command: "))
+	if cmd ~= "" then
+		vim.cmd("!" .. cmd)
+	end
+end
+
 function M.setup()
 	-- Define CompPls command, calling compile logic
 	vim.api.nvim_create_user_command("CompPls", M.compile, {})
