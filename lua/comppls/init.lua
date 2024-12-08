@@ -1,7 +1,7 @@
 local M = {}
 
 local function scratch()
-	vim.cmd("new")
+	vim.cmd("ScatchSplit")
 	local buf = vim.api.nvim_get_current_buf()
 	return buf
 end
